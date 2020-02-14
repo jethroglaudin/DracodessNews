@@ -6,11 +6,12 @@ const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 const users = require('./Routes/users')
 const app = express();
-const PORT = process.env.PORT || 4000;
+
 
 dotenv.config({ path: "./config/config.env" })
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(cookieParser());
 app.use('api/users', users);
@@ -24,7 +25,6 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 .then(console.log("Connected to MongDB database"))
 .catch((err) => console.log(err));
 
-app.listen(PORT, () => console.log(`Currently listening on PORT ${PORT} in ${process.env.NODE_ENV} mode`));
-
+app.listen(process.env.PORT, () => console.log(`Currently listening on PORT ${process.env.PORT} in ${process.env.NODE_ENV} mode`));
 
 
