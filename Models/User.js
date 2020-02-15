@@ -7,7 +7,7 @@ const UserSchema = new mongoose.Schema({
         minLength: 1,
         maxlength: 200
     },
-    username: {
+    userName: {
         type: String,
         required: true,
         minLength: 2,
@@ -31,7 +31,7 @@ const UserSchema = new mongoose.Schema({
 })
 
 
-const User = mongoose.model(UserSchema);
+const User = mongoose.model('User', UserSchema);
 
 function validateUser(){
     // validate User from MongoDB
