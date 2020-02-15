@@ -45,9 +45,20 @@ router.post("/register", async (req, res) => {
 // @route GET api/users/login
 // @desc Login User
 // @access Public
-
 router.get("/login", async (req, res) => {
-    res.send("login")
+    const { email, userName, password } = req.body;
+    const user = await User.findOne({$or: [ { email }, { userName } ]})
+    if(!user) return res.status(400).send("Invalid email/username or password");
+
+    const isValidPassword = await bcyrpt.compare(password, user.password);
+    if(!isValidPassword) res.status(400).send("Invalid email or password");
+    console.log(isValidPassword)
+
+    const payload = { id: user.id, name: user.name, userName: userName};
+    res.send(payload);
+    
+    
+    
 })
 
 
