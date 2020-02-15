@@ -39,7 +39,7 @@ function validateUser(user){
        name: Joi.string().min(1).max(200).required(),
        username: Joi.string().min(2).max(15).required(),
        email: Joi.string().required().email(),
-       password: Joi.string().min(8).maxLength(50).required()
+       password: Joi.string().min(8).max(50).required()
    }
    return Joi.validate(user, schema);
 }
