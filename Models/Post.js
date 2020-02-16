@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
-const PostSchema = new mongoose.Schema({
+const Schema = mongoose.Schema;
+
+const PostSchema = new Schema({
   originalPoster: {
     type: Schema.Types.ObjectId,
-    ref: "Users"
+    ref: "User"
   },
   title: {
     type: String,
@@ -69,5 +71,5 @@ function validateComment (comment) {
 }
 
 exports.Post = Post;
-exports.validate = validatePost;
+exports.validatePost = validatePost;
 exports.validateComment = validateComment;
