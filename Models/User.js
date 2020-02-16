@@ -1,5 +1,11 @@
 const mongoose = require('mongoose');
 const Joi = require("joi");
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const config = require('config');
+const dotenv = require('dotenv');
+dotenv.config({ path: "./config/config.env" })
+
 const UserSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -29,7 +35,20 @@ const UserSchema = new mongoose.Schema({
         type: String
     }  
 })
+UserSchema.pre("save", async function(next) {
+    if(!this.isModified("password")){
+        next();
+    }
 
+    const salt = await bcrypt.genSalt(12);
+    this.password = await bcrypt.hash(this.password, salt);
+});
+
+UserSchema.methods.generateToken = function() {
+    return token = jwt.sign({ _id: this._id }, config.get("jwtPrivateKey"), {
+        expiresIn: 36000
+    });
+}
 
 const User = mongoose.model('User', UserSchema);
 
