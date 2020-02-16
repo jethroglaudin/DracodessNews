@@ -24,10 +24,10 @@ router.post("/register", async (req, res) => {
   let checkEmail = await User.findOne({ email });
   let checkUserName = await User.findOne({ userName });
   let checkPassword = await User.findOne({ password });
-  if (checkEmail) res.status(400).send("Email already exists.");
-  if (checkUserName) res.status(400).send("Username already exists.");
-  if (checkPassword) res.status(400).send("Password already exists.");
-  if (password !== password2) res.status(400).send("Password does not match");
+  if (checkEmail) return res.status(400).send("Email already exists.");
+  if (checkUserName) return res.status(400).send("Username already exists.");
+  if (checkPassword) return res.status(400).send("Password already exists.");
+  if (password !== password2) return res.status(400).send("Password does not match");
 
   let user = new User({
     name: name,
