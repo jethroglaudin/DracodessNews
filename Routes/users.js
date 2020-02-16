@@ -29,7 +29,7 @@ router.post("/register", async (req, res) => {
   if (checkPassword) return res.status(400).send("Password already exists.");
   if (password !== password2) return res.status(400).send("Password does not match");
 
-  let user = new User({
+  const user = new User({
     name: name,
     userName: userName,
     email: email,
@@ -41,7 +41,7 @@ router.post("/register", async (req, res) => {
   
 
   //  const salt = await bcyrpt.genSalt(12);
-  // const token = user.generateToken();
+  // const token = user.generateToken()
   // res.header("x-auth-token", token).send({ id: newUser._id, name: newUser.name, userName: newUser.userName });
 
   // will redirect to login template/html file
@@ -51,17 +51,20 @@ router.post("/register", async (req, res) => {
 // @desc Login User
 // @access Public
 router.get("/login", async (req, res) => {
-  console.log(req.headers);
+  const { errors } = req.body;
   const { email, userName, password } = req.body;
   const user = await User.findOne({ $or: [{ email }, { userName }] });
-  if (!user) return res.status(400).send("Invalid email/username or password");
+  if (!user) return res.status(400).send("Invalid email/username or password", res.json(errors).details[0].message);
 
   const isValidPassword = await bcyrpt.compare(password, user.password);
-  if (!isValidPassword) res.status(400).send("Invalid email or password");
+  if (!isValidPassword) return res.status(400).send("Invalid email or password", res.json(errors.details[0].message));
   console.log(isValidPassword);
+  
+  const token = user.generateToken();
+  res.header('x-auth-token', token).send({ _id: user._id, name: user.name, userName: userName})
+  // redirect to main page
+  
 
-  const payload = { id: user.id, name: user.name, userName: userName };
-  res.send(payload);
 });
 
 module.exports = router;
