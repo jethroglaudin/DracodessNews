@@ -26,10 +26,22 @@ const PostSchema = new Schema({
   posterAvatar: {
     type: String
   },
-  likes: {
-    type: Number
-  },
-
+  likes: [
+    {
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: "users"
+      }
+    }
+  ],
+  unlikes: [
+    {
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: "users"
+      }
+    }
+  ],
   comments: [
     {
       commentor: {
@@ -47,10 +59,10 @@ const PostSchema = new Schema({
         type: String
       },
       date: {
-          type: Date,
-          default: Date.now
+        type: Date,
+        default: Date.now
       }
-    },
+    }
   ],
   date: {
     type: Date,
@@ -58,23 +70,28 @@ const PostSchema = new Schema({
   }
 });
 
-const Post = mongoose.model('post', PostSchema);
+const Post = mongoose.model("post", PostSchema);
 
-function validatePost (post) {
-    const postSchema = {
-        user: Joi.string().required(),
-        title: Joi.string().min(3).max(160).required(),
-        summary: Joi.string().min(30).required(),
-        url: Joi.string().required()
-    }
-    return Joi.validate(post, postSchema);
+function validatePost(post) {
+  const postSchema = {
+    user: Joi.string().required(),
+    title: Joi.string()
+      .min(3)
+      .max(160)
+      .required(),
+    summary: Joi.string()
+      .min(30)
+      .required(),
+    url: Joi.string().required()
+  };
+  return Joi.validate(post, postSchema);
 }
 
-function validateComment (comment) {
-    const commentSchema = {
-        text: Joi.string().required()
-    }
-    return Joi.validate(comment, commentSchema);
+function validateComment(comment) {
+  const commentSchema = {
+    text: Joi.string().required()
+  };
+  return Joi.validate(comment, commentSchema);
 }
 
 exports.Post = Post;
