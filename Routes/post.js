@@ -73,9 +73,7 @@ router.post("/like/:id", authenticate, async (req, res) => {
         return res.status(400).json({ error: "User has already liked post" });
       }
       if (
-        post.unlikes.filter(
-          unlike => unlike.user.toString() === req.user._id
-        )
+        post.unlikes.filter(unlike => unlike.user.toString() === req.user._id)
       ) {
         const removeIndex = post.unlikes
           .map(elem => elem.user.toString())
@@ -102,9 +100,8 @@ router.post("/unlike/:id", authenticate, async (req, res) => {
     if (user) {
       const post = await Post.findById(req.params.id);
       if (
-        post.unlikes.filter(
-          unlike => unlike.user.toString() === req.user._id
-        ).length > 0
+        post.unlikes.filter(unlike => unlike.user.toString() === req.user._id)
+          .length > 0
       ) {
         return res.status(400).json({ error: "User has already unliked post" });
       }
@@ -128,15 +125,21 @@ router.post("/unlike/:id", authenticate, async (req, res) => {
 // @desc Add Comment
 // @access private
 router.post("/comment/:id", authenticate, async (req, res) => {
-    const { error }  = validateComment(req.body);
+  try {
+    const { error } = validateComment(req.body);
     const { text } = req.body;
 
     if (error) return res.status(400).send(error.details[0].message);
 
-    Post.findById(req.params.id)
-
-
-
-})
+    const post = await Post.findById(req.params.id);
+    const newComment = { text };
+    post.comments.unshift(newComment);
+    post.comments.populate("commentor");
+    await post.save();
+    res.json(post);
+  } catch (error) {
+    res.status(404).json({ error: "No Post Found" });
+  }
+});
 
 module.exports = router;
