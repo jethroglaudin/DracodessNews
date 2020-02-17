@@ -65,26 +65,26 @@ router.post("/like/:id", authenticate, async (req, res) => {
     const user = await User.findOne({ user: req.body._id });
     console.log(req.user);
     if (user) {
-      const comment = await Post.findById(req.params.id);
+      const post = await Post.findById(req.params.id);
       if (
-        comment.likes.filter(like => like.user.toString() === req.user._id)
+        post.likes.filter(like => like.user.toString() === req.user._id)
           .length > 0
       ) {
         return res.status(400).json({ error: "User has already liked post" });
       }
       if (
-        comment.unlikes.filter(
+        post.unlikes.filter(
           unlike => unlike.user.toString() === req.user._id
         )
       ) {
-        const removeIndex = comment.unlikes
+        const removeIndex = post.unlikes
           .map(elem => elem.user.toString())
           .indexOf(req.user._id);
-        comment.unlikes.splice(removeIndex, 1);
+        post.unlikes.splice(removeIndex, 1);
       }
-      comment.likes.unshift({ user: req.user._id });
-      await comment.save();
-      res.json(comment);
+      post.likes.unshift({ user: req.user._id });
+      await post.save();
+      res.json(post);
     }
   } catch (error) {
     res.status(404).json({ error: "No Post Found" });
@@ -92,36 +92,51 @@ router.post("/like/:id", authenticate, async (req, res) => {
   // redirect home page
 });
 
-// @route POST api/post/like/:id
-// @desc Like post
+// @route POST api/post/unlike/:id
+// @desc Unlike post
 // @access private
 router.post("/unlike/:id", authenticate, async (req, res) => {
   try {
     const user = await User.findOne({ user: req.body._id });
     console.log(req.user);
     if (user) {
-      const comment = await Post.findById(req.params.id);
+      const post = await Post.findById(req.params.id);
       if (
-        comment.unlikes.filter(
+        post.unlikes.filter(
           unlike => unlike.user.toString() === req.user._id
         ).length > 0
       ) {
         return res.status(400).json({ error: "User has already unliked post" });
       }
-      if (comment.likes.filter(like => like.user.toString() === req.user._id)) {
-        const removeIndex = comment.likes
+      if (post.likes.filter(like => like.user.toString() === req.user._id)) {
+        const removeIndex = post.likes
           .map(elem => elem.user.toString())
           .indexOf(req.user._id);
-        comment.likes.splice(removeIndex, 1);
+        post.likes.splice(removeIndex, 1);
       }
-      comment.unlikes.unshift({ user: req.user._id });
-      await comment.save();
-      res.json(comment);
+      post.unlikes.unshift({ user: req.user._id });
+      await post.save();
+      res.json(post);
     }
   } catch (error) {
     res.status(404).json({ error: "No Post Found" });
   }
   // redirect home page
 });
+
+// @route POST api/post/comment/:id
+// @desc Add Comment
+// @access private
+router.post("/comment/:id", authenticate, async (req, res) => {
+    const { error }  = validateComment(req.body);
+    const { text } = req.body;
+
+    if (error) return res.status(400).send(error.details[0].message);
+
+    Post.findById(req.params.id)
+
+
+
+})
 
 module.exports = router;
