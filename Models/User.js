@@ -50,7 +50,7 @@ UserSchema.methods.generateToken = function() {
     });
 }
 
-const User = mongoose.model('User', UserSchema);
+const User = mongoose.model('users', UserSchema,'users');
 
 function validateUser(user){
     // validate User from MongoDB
