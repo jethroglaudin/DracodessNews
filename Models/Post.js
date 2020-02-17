@@ -3,9 +3,9 @@ const Joi = require("joi");
 const Schema = mongoose.Schema;
 
 const PostSchema = new Schema({
-  originalPoster: {
+  user: {
     type: Schema.Types.ObjectId,
-    ref: "User"
+    ref: "users"
   },
   title: {
     type: String,
@@ -23,6 +23,12 @@ const PostSchema = new Schema({
     type: String,
     require: true
   },
+  posterAvatar: {
+    type: String
+  },
+  likes: {
+    type: Number
+  },
 
   comments: [
     {
@@ -37,7 +43,7 @@ const PostSchema = new Schema({
       userName: {
         type: String
       },
-      avatar: {
+      commentorAvatar: {
         type: String
       },
       date: {
@@ -56,6 +62,7 @@ const Post = mongoose.model('post', PostSchema);
 
 function validatePost (post) {
     const postSchema = {
+        user: Joi.string().required(),
         title: Joi.string().min(3).max(160).required(),
         summary: Joi.string().min(30).required(),
         url: Joi.string().required()
