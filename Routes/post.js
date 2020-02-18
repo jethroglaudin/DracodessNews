@@ -7,9 +7,9 @@ const { User } = require("../Models/User");
 // @route GET api/post/
 // @desc test post route and authentication
 // @access private
-router.get("/", async (req, res) => {
+router.get("/test", async (req, res) => {
   res.render('index');
-  res.send("Authentication works");
+  // res.send("Authentication works");
 });
 
 // @route GET api/post/
@@ -20,7 +20,8 @@ router.get("/posts", async (req, res) => {
     const allPost = await Post.find()
       .populate("user", ["name", "userName", "email"])
       .sort({ date: 1 });
-    res.json(allPost);
+    // res.json(allPost);
+    res.render("posts/public", { data: allPost })
     
   } catch (error) {
     res.status(404).json({ NoPostfound: "No Post Found" });
