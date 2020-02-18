@@ -4,10 +4,11 @@ const router = express.Router();
 const { Post, validatePost, validateComment } = require("../Models/Post");
 const { User } = require("../Models/User");
 
-// @route GET api/post/test
+// @route GET api/post/
 // @desc test post route and authentication
 // @access private
-router.get("/test", authenticate, async (req, res) => {
+router.get("/", async (req, res) => {
+  res.render('index');
   res.send("Authentication works");
 });
 
@@ -20,6 +21,7 @@ router.get("/posts", async (req, res) => {
       .populate("user", ["name", "userName", "email"])
       .sort({ date: 1 });
     res.json(allPost);
+    
   } catch (error) {
     res.status(404).json({ NoPostfound: "No Post Found" });
   }
