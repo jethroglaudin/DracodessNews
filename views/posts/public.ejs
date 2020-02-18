@@ -1,0 +1,31 @@
+<!-- include header content  -->
+<%- include ('../layouts/header.ejs') %>
+<%- include ('../layouts/navbar.ejs') %>
+
+<div class="table-responsive">
+
+    <table class="table">
+        
+        <!-- <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">First</th>
+        <th scope="col">Last</th>
+        <th scope="col">Handle</th>
+      </tr>
+    </thead> -->
+        <tbody>
+            <% if(data) { %>
+            <% data.forEach(function(post) { %>
+            <tr>
+                <th scope="row">1</th>
+                <td><a href="<%= post.url %>"><%= post.title %></a></td>
+                <td><%= post.summary %></td>
+                <td></td>
+            </tr>
+            <% }) %>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+<%- include ('../layouts/footer.ejs') %>
