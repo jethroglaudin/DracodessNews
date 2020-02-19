@@ -1,0 +1,23 @@
+<%- include ('../layouts/header.ejs') %>
+<%- include ('../layouts/navbar.ejs') %>
+<form action="/api/post/create" method="POST" enctype="multipart/form-data">
+    <div class="form-group">
+      <label for="exampleInputEmail1">Title</label>
+      <input type="text" class="form-control" id="title" value="<%= title %>" aria-describedby="textHelp" placeholder="Enter Text" required>
+      <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+    </div>
+    <div class="form-group">
+      <label for="url">URL:</label>
+      <input type="text" class="form-control" id="url" value="<%= url %>" placeholder="Enter Link">
+    </div>
+    <div class="form-group">
+        <label for="url">Summary:</label>
+        <input type="text" class="form-control" id="summary" value="<%= summary %>" placeholder="Provide Summary">
+      </div>
+    <!-- <div class="form-check">
+      <input type="checkbox" class="form-check-input" id="exampleCheck1">
+      <label class="form-check-label" for="exampleCheck1">Check me out</label>
+    </div> -->
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  <%- include ('../layouts/footer.ejs') %>
