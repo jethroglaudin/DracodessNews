@@ -8,6 +8,7 @@ const dotenv = require('dotenv');
 const users = require('./Routes/users')
 const post = require('./Routes/post');
 const app = express();
+const bodyparser = require("body-parser");
 const PORT = process.env.PORT || 4000;
 
 dotenv.config({ path: "./config/config.env" })
@@ -43,3 +44,6 @@ process.on("unhandledRejection", (error, promise) => {
     server.close(() => process.exit(1));
 })
 
+
+
+var key =  `This my key KEY`
