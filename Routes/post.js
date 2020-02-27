@@ -7,8 +7,17 @@ const { User } = require("../Models/User");
 // @route GET api/post/
 // @desc test post route and authentication
 // @access private
-router.get("/test", async (req, res) => {
+router.get("/test", authenticate, async (req, res) => {
   res.render('index');
+  // res.send("Authentication works");
+});
+
+router.get("/create", async (req, res) => {
+  res.render('posts/create', {  
+    title: "",
+    url: "",
+    summary: ""
+});
   // res.send("Authentication works");
 });
 
@@ -28,23 +37,23 @@ router.get("/posts", async (req, res) => {
   }
 });
 
-// @route POST api/post/newpost
+// @route POST api/post/create
 // @desc Create Post
 // @access private
-router.post("/post", authenticate, async (req, res) => {
-  const { user, title, summary, url } = req.body;
+router.post("/create", async (req, res) => {
+  const { title, summary, url } = req.body;
   const { error } = validatePost(req.body);
 
   if (error) return res.status(400).send(error.details[0].message);
 
   let newPost = new Post({
-    user,
     title,
     summary,
     url
   });
   newPost = await newPost.save();
-  res.send(newPost);
+  // res.send(newPost);
+  res.redirect("/api/post/")
 });
 
 // @route GET api/post/newpost
