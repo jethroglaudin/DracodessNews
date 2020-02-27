@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const PostSchema = new Schema({
   user: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Types.ObjectId,
     ref: "users"
   },
   title: {
@@ -29,7 +29,7 @@ const PostSchema = new Schema({
   likes: [
     {
       user: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: "users"
       }
     }
@@ -37,7 +37,7 @@ const PostSchema = new Schema({
   unlikes: [
     {
       user: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: "users"
       }
     }
@@ -45,7 +45,7 @@ const PostSchema = new Schema({
   comments: [
     {
       commentor: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: "users"
       },
       text: {
@@ -74,7 +74,7 @@ const Post = mongoose.model("post", PostSchema);
 
 function validatePost(post) {
   const postSchema = {
-    user: Joi.string().required(),
+    user: Joi.string(),
     title: Joi.string()
       .min(3)
       .max(160)
